@@ -90,25 +90,22 @@ class HexapodEnv(Env):
         # Define a threshold for "flipped"
         upside_down = abs(roll) > 2.0 or abs(pitch) > 2.0  # ~115 degrees
 
-
         
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
-        base_linear, _ = p.getBaseVelocity(self.robot)
+        base_linear, base_angular = p.getBaseVelocity(self.robot)
 
-        # Convert orientation to Euler
+        # Reward is global x-axis velocity
+        reward = base_linear[0]  # how fast we're moving along x
+
+        # Optional penalty: drifting sideways (in y direction)
+        side_drift_penalty = abs(base_linear[1])  # lateral motion
+        reward -= 0.2 * side_drift_penalty  # tune the weight as you like
+
+        # Optional penalty: turning away from x-axis (yawing)
         _, _, yaw = p.getEulerFromQuaternion(base_ori)
+        yaw_penalty = abs(yaw)  # penalize deviation from x-axis heading
+        reward -= 0.1 * yaw_penalty  # again, tune the weight
 
-        # Robot's facing direction (unit vector in x-y plane)
-        forward_vector = np.array([np.cos(yaw), np.sin(yaw)])
-
-        # Robot's linear velocity in x-y plane
-        velocity_vector = np.array(base_linear[:2])
-
-        # Project velocity onto facing direction
-        forward_velocity = np.dot(velocity_vector, forward_vector)
-
-        # Reward is forward velocity
-        reward = forward_velocity
 
 
         # Episode is truncated if flipped
