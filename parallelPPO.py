@@ -27,7 +27,7 @@ class TimestepPrinterCallback(BaseCallback):
         return True
 
 if __name__ == "__main__":  # ← ✅ Fix: only spawn processes inside here
-    num_envs = 4
+    num_envs = 16
     env = SubprocVecEnv([make_env(i) for i in range(num_envs)])
     eval_env = Monitor(TimeLimit(HexapodEnv(render=False), max_episode_steps=500))
 
