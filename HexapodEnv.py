@@ -90,6 +90,8 @@ class HexapodEnv(Env):
         # Define a threshold for "flipped"
         upside_down = abs(roll) > 2.0 or abs(pitch) > 2.0  # ~115 degrees
 
+
+        
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
         base_linear, _ = p.getBaseVelocity(self.robot)
 
@@ -129,7 +131,7 @@ class HexapodEnv(Env):
         joint_positions = np.array([s[0] for s in joint_states], dtype=np.float32)
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
         base_linear, base_angular = p.getBaseVelocity(self.robot)
-        obs = np.concatenate([joint_positions, base_ori, base_linear, base_angular])
+        obs = np.concatenate([joint_positions, base_pos, base_ori, base_linear, base_angular])
         return obs.astype(np.float32)  # ✅ enforce dtype here
 
     def render(self):
