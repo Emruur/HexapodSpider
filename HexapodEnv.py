@@ -66,10 +66,19 @@ class HexapodEnv(Env):
         # Apply the action (as you already do)
         action = np.clip(action, self.min_joint_angle, self.max_joint_angle)
 
-        for i, joint_idx in enumerate(self.joint_indices):
-            p.setJointMotorControl2(self.robot, joint_idx, p.POSITION_CONTROL, targetPosition=action[i])
+        max_joint_velocity = 1.0  # You can tune this (e.g., 0.5 for slower)
 
-        for _ in range(10):
+        for i, joint_idx in enumerate(self.joint_indices):
+            p.setJointMotorControl2(
+                bodyIndex=self.robot,
+                jointIndex=joint_idx,
+                controlMode=p.POSITION_CONTROL,
+                targetPosition=action[i],
+                maxVelocity=max_joint_velocity,
+                force= 30
+            )
+
+        for _ in range(30):
             p.stepSimulation()
 
         # Get position and orientation
@@ -91,6 +100,9 @@ class HexapodEnv(Env):
 
         obs = self._get_obs()
         info = {}
+        
+        if truncated:
+            reward = 0
 
         return obs, reward, terminated, truncated, info
 

@@ -6,7 +6,7 @@ model = PPO.load("logs/best_model/best_model.zip")
 
 obs, _ = env.reset()
 
-for _ in range(1000):
+for _ in range(500):
     action, _ = model.predict(obs)
     obs, reward, terminated, truncated, _ = env.step(action)
     env.render()

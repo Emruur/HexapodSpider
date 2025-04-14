@@ -6,8 +6,10 @@ from stable_baselines3.common.callbacks import BaseCallback
 from HexapodEnv import HexapodEnv  # Your custom env
 from gymnasium.wrappers import TimeLimit
 
-env = Monitor(TimeLimit(HexapodEnv(render=False), max_episode_steps=1000), filename="./logs/train/monitor.csv")
-eval_env = Monitor(TimeLimit(HexapodEnv(render=False), max_episode_steps=1000))
+
+
+env = Monitor(TimeLimit(HexapodEnv(render=False), max_episode_steps=500), filename="./logs/train/monitor.csv")
+eval_env = Monitor(TimeLimit(HexapodEnv(render=False), max_episode_steps=500))
 check_env(env, warn= True)
 
 
@@ -39,7 +41,7 @@ checkpoint_callback = CheckpointCallback(
     name_prefix='ppo_hexapod'
 )
 
-timestep_callback = TimestepPrinterCallback(print_freq=100)
+timestep_callback = TimestepPrinterCallback(print_freq=1000)
 
 model = PPO(
     "MlpPolicy",
