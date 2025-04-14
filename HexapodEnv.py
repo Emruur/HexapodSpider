@@ -90,9 +90,24 @@ class HexapodEnv(Env):
         # Define a threshold for "flipped"
         upside_down = abs(roll) > 2.0 or abs(pitch) > 2.0  # ~115 degrees
 
-        # Compute reward (as before)
-        distance = np.linalg.norm(np.array(base_pos[:2]) - self.initial_pos[:2])
-        reward = distance
+        base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
+        base_linear, _ = p.getBaseVelocity(self.robot)
+
+        # Convert orientation to Euler
+        _, _, yaw = p.getEulerFromQuaternion(base_ori)
+
+        # Robot's facing direction (unit vector in x-y plane)
+        forward_vector = np.array([np.cos(yaw), np.sin(yaw)])
+
+        # Robot's linear velocity in x-y plane
+        velocity_vector = np.array(base_linear[:2])
+
+        # Project velocity onto facing direction
+        forward_velocity = np.dot(velocity_vector, forward_vector)
+
+        # Reward is forward velocity
+        reward = forward_velocity
+
 
         # Episode is truncated if flipped
         terminated = False
@@ -103,6 +118,8 @@ class HexapodEnv(Env):
         
         if truncated:
             reward = 0
+            
+        
 
         return obs, reward, terminated, truncated, info
 
@@ -112,7 +129,7 @@ class HexapodEnv(Env):
         joint_positions = np.array([s[0] for s in joint_states], dtype=np.float32)
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
         base_linear, base_angular = p.getBaseVelocity(self.robot)
-        obs = np.concatenate([joint_positions, base_pos, base_ori, base_linear, base_angular])
+        obs = np.concatenate([joint_positions, base_ori, base_linear, base_angular])
         return obs.astype(np.float32)  # ✅ enforce dtype here
 
     def render(self):
