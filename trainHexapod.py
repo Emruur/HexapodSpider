@@ -48,7 +48,7 @@ model = PPO(
     env,
     verbose=2,  # show more details
     tensorboard_log="./logs/tensorboard",
-    device="cpu"
+    device="auto"
 )
 
 model.learn(
