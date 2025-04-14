@@ -48,10 +48,10 @@ model = PPO(
     env,
     verbose=2,  # show more details
     tensorboard_log="./logs/tensorboard",
-    device="auto"
+    device="cpu"
 )
 
 model.learn(
-    total_timesteps=100_000,
+    total_timesteps=3_000_000,
     callback=[eval_callback, checkpoint_callback,timestep_callback]
 )
