@@ -3,13 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # === CONFIG ===
-monitor_file = "logs/train/monitor.csv"  # path to your monitor.csv
+monitor_file = "logs/train/monitor_0.csv.monitor.csv"  # path to your monitor.csv
 enable_smoothing = True                  # Set to False to disable smoothing
 smooth_window = 10                       # Smoothing window size (only if enabled)
 
 # === LOAD DATA ===
 df = pd.read_csv(monitor_file, skiprows=1)  # skip comment line
-df['t'] = df['t'] - df['t'].iloc[0]         # normalize time
 
 # === PLOTTING ===
 plt.figure(figsize=(10, 5))
@@ -19,7 +18,7 @@ if enable_smoothing:
     smoothed = df['r'].rolling(smooth_window).mean()
     plt.plot(df['t'], smoothed, label=f'{smooth_window}-Episode Moving Average', linewidth=2)
 
-plt.xlabel("Time (s)")
+plt.xlabel("Timestep (n)")
 plt.ylabel("Episode Reward")
 plt.title("Learning Curve")
 plt.grid(True)
