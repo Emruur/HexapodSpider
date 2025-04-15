@@ -59,6 +59,15 @@ class HexapodEnv(Env):
             shape=(len(self.joint_indices),),
             dtype=np.float32
         )
+        
+        # ✅ Initialize jitter tracking
+        base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
+        base_linear, base_angular = p.getBaseVelocity(self.robot)
+        roll, pitch, yaw = p.getEulerFromQuaternion(base_ori)
+
+        self.prev_base_ori = [roll, pitch, yaw]
+        self.prev_base_linear = base_linear
+        self.prev_base_angular = base_angular
 
         return obs, {}
 
