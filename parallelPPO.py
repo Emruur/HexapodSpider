@@ -57,6 +57,6 @@ if __name__ == "__main__":  # ← ✅ Fix: only spawn processes inside here
     )
 
     model.learn(
-        total_timesteps=5_000_000,
+        total_timesteps=15_000_000,
         callback=[eval_callback, checkpoint_callback, timestep_callback]
     )
