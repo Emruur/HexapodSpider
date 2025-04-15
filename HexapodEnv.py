@@ -63,10 +63,9 @@ class HexapodEnv(Env):
         return obs, {}
 
     def step(self, action):
-        # Apply the action (as you already do)
+        # --- Apply the action ---
         action = np.clip(action, self.min_joint_angle, self.max_joint_angle)
-
-        max_joint_velocity = 1.0  # You can tune this (e.g., 0.5 for slower)
+        max_joint_velocity = 1.0
 
         for i, joint_idx in enumerate(self.joint_indices):
             p.setJointMotorControl2(
@@ -75,73 +74,77 @@ class HexapodEnv(Env):
                 controlMode=p.POSITION_CONTROL,
                 targetPosition=action[i],
                 maxVelocity=max_joint_velocity,
-                force= 30
+                force=30
             )
 
         for _ in range(30):
             p.stepSimulation()
 
-        # Get position and orientation
-        base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
-
-        # Convert orientation to Euler
-        roll, pitch, yaw = p.getEulerFromQuaternion(base_ori)
-
-        # Define a threshold for "flipped"
-        upside_down = abs(roll) > 2.0 or abs(pitch) > 2.0  # ~115 degrees
-
-        
+        # --- Get pose and velocities ---
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
         base_linear, base_angular = p.getBaseVelocity(self.robot)
-
-        # Convert orientation to Euler angles
         roll, pitch, yaw = p.getEulerFromQuaternion(base_ori)
 
-        # Components
+        # --- Truncation condition: flipped over ---
+        upside_down = abs(roll) > 2.0 or abs(pitch) > 2.0
+        terminated = False
+        truncated = upside_down
+
+        # --- Components for reward ---
         forward = base_linear[0]
         lateral = base_linear[1]
         height = base_pos[2]
 
-        # --- Reward Design ---
+        # --- Jitter components ---
+        if self.prev_base_ori is None:
+            self.prev_base_ori = [roll, pitch, yaw]
+            self.prev_base_linear = base_linear
+            self.prev_base_angular = base_angular
+
+        prev_roll, prev_pitch, prev_yaw = self.prev_base_ori
+
+        orientation_jitter = abs(roll - prev_roll) + abs(pitch - prev_pitch) + abs(yaw - prev_yaw)
+        velocity_jitter = np.linalg.norm(np.array(base_linear) - np.array(self.prev_base_linear))
+        angular_jitter = np.linalg.norm(np.array(base_angular) - np.array(self.prev_base_angular))
+
+        # --- Reward calculation ---
         reward = 0.0
-
-        # ✅ Reward forward movement along world x-axis
-        reward += forward
-
-        # ⛔ Penalize lateral drift
-        reward -= 0.2 * abs(lateral)
-
-        # ⛔ Penalize yaw deviation from world x-axis
-        reward -= 0.1 * abs(yaw)
-
-        # ⛔ Penalize roll and pitch to encourage flat body orientation
-        reward -= 0.3 * abs(roll)
+        reward += forward                             # ✅ Forward movement
+        reward -= 0.2 * abs(lateral)                  # ⛔ Sideways drift
+        reward -= 0.1 * abs(yaw)                      # ⛔ Rotational deviation
+        reward -= 0.3 * abs(roll)                     # ⛔ Body tilt
         reward -= 0.3 * abs(pitch)
+        reward -= 2.0 * abs(height - 0.1)             # ⛔ Bouncing
 
-        # ⛔ Optional: Penalize deviation from expected height (e.g., 0.2 meters)
-        desired_height = 0.1
-        reward -= 2.0 * abs(height - desired_height)
-        
-        
+        reward -= 0.5 * orientation_jitter            # ⛔ Twitching rotation
+        reward -= 0.1 * velocity_jitter               # ⛔ Sudden shifts
+        reward -= 0.1 * angular_jitter                # ⛔ Wobbling
 
-        
-
-
-
-        # Episode is truncated if flipped
-        terminated = False
-        truncated = upside_down
-
-        obs = self._get_obs()
-        info = {}
-        
+        # --- Zero reward if flipped ---
         if truncated:
-            reward = 0
-            
-        
+            reward = 0.0
+
+        # --- Store current state for next step ---
+        self.prev_base_ori = [roll, pitch, yaw]
+        self.prev_base_linear = base_linear
+        self.prev_base_angular = base_angular
+
+        # --- Final return ---
+        obs = self._get_obs()
+        info = {
+            "forward_vel": forward,
+            "lateral_vel": lateral,
+            "roll": roll,
+            "pitch": pitch,
+            "yaw": yaw,
+            "height": height,
+            "reward": reward,
+            "orientation_jitter": orientation_jitter,
+            "velocity_jitter": velocity_jitter,
+            "angular_jitter": angular_jitter
+        }
 
         return obs, reward, terminated, truncated, info
-
 
     def _get_obs(self):
         joint_states = p.getJointStates(self.robot, self.joint_indices)
