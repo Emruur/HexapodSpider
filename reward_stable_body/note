@@ -1,1 +1,33 @@
 obs = np.concatenate([joint_positions, base_ori, base_linear, base_angular])
+
+
+base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
+        base_linear, base_angular = p.getBaseVelocity(self.robot)
+
+        # Convert orientation to Euler angles
+        roll, pitch, yaw = p.getEulerFromQuaternion(base_ori)
+
+        # Components
+        forward = base_linear[0]
+        lateral = base_linear[1]
+        height = base_pos[2]
+
+        # --- Reward Design ---
+        reward = 0.0
+
+        # ✅ Reward forward movement along world x-axis
+        reward += forward
+
+        # ⛔ Penalize lateral drift
+        reward -= 0.2 * abs(lateral)
+
+        # ⛔ Penalize yaw deviation from world x-axis
+        reward -= 0.1 * abs(yaw)
+
+        # ⛔ Penalize roll and pitch to encourage flat body orientation
+        reward -= 0.3 * abs(roll)
+        reward -= 0.3 * abs(pitch)
+
+        # ⛔ Optional: Penalize deviation from expected height (e.g., 0.2 meters)
+        desired_height = 0.
+        reward -= 2.0 * abs(height - desired_height)

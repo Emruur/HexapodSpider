@@ -94,17 +94,49 @@ class HexapodEnv(Env):
         base_pos, base_ori = p.getBasePositionAndOrientation(self.robot)
         base_linear, base_angular = p.getBaseVelocity(self.robot)
 
-        # Reward is global x-axis velocity
-        reward = base_linear[0]  # how fast we're moving along x
+        # Convert orientation to Euler angles
+        roll, pitch, yaw = p.getEulerFromQuaternion(base_ori)
 
-        # Optional penalty: drifting sideways (in y direction)
-        side_drift_penalty = abs(base_linear[1])  # lateral motion
-        reward -= 0.2 * side_drift_penalty  # tune the weight as you like
+        # Components
+        forward = base_linear[0]
+        lateral = base_linear[1]
+        height = base_pos[2]
 
-        # Optional penalty: turning away from x-axis (yawing)
-        _, _, yaw = p.getEulerFromQuaternion(base_ori)
-        yaw_penalty = abs(yaw)  # penalize deviation from x-axis heading
-        reward -= 0.1 * yaw_penalty  # again, tune the weight
+        # --- Reward Design ---
+        reward = 0.0
+
+        # ✅ Reward forward movement along world x-axis
+        reward += forward
+
+        # ⛔ Penalize lateral drift
+        reward -= 0.2 * abs(lateral)
+
+        # ⛔ Penalize yaw deviation from world x-axis
+        reward -= 0.1 * abs(yaw)
+
+        # ⛔ Penalize roll and pitch to encourage flat body orientation
+        reward -= 0.3 * abs(roll)
+        reward -= 0.3 * abs(pitch)
+
+        # ⛔ Optional: Penalize deviation from expected height (e.g., 0.2 meters)
+        desired_height = 0.1
+        reward -= 2.0 * abs(height - desired_height)
+        
+        contact_feet = 0
+        joints_per_leg= 3
+        for j in self.joint_indices:
+            contact_points = p.getContactPoints(bodyA=self.robot, linkIndexA=j)
+            if len(contact_points) > 0:
+                contact_feet += 1
+
+        # Assuming each leg has one main contact joint:
+        num_legs = len(self.joint_indices) // joints_per_leg  # define joints_per_leg accordingly
+        legs_off_ground = num_legs - contact_feet
+
+        if legs_off_ground > 2:
+            reward -= 0.5 * (legs_off_ground - 2)  # penalize extra lifted legs
+
+        
 
 
 
