@@ -122,19 +122,7 @@ class HexapodEnv(Env):
         desired_height = 0.1
         reward -= 2.0 * abs(height - desired_height)
         
-        contact_feet = 0
-        joints_per_leg= 3
-        for j in self.joint_indices:
-            contact_points = p.getContactPoints(bodyA=self.robot, linkIndexA=j)
-            if len(contact_points) > 0:
-                contact_feet += 1
-
-        # Assuming each leg has one main contact joint:
-        num_legs = len(self.joint_indices) // joints_per_leg  # define joints_per_leg accordingly
-        legs_off_ground = num_legs - contact_feet
-
-        if legs_off_ground > 2:
-            reward -= 0.5 * (legs_off_ground - 2)  # penalize extra lifted legs
+        
 
         
 
