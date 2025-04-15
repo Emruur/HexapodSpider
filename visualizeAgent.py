@@ -2,7 +2,7 @@ from HexapodEnv import HexapodEnv
 from stable_baselines3 import PPO
 
 env = HexapodEnv(render=True)
-model = PPO.load("reward_velocity_x/best_model/best_model.zip")
+model = PPO.load("reward_x_component/best_model/best_model.zip")
 
 obs, _ = env.reset()
 
