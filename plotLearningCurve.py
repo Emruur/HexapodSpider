@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # === CONFIG ===
-monitor_file = "reward_x_component/train/monitor_0.csv.monitor.csv"  # path to your monitor.csv
+monitor_file = "reward_stable_body/train/monitor_0.csv.monitor.csv"  # path to your monitor.csv
 enable_smoothing = True                  # Set to False to disable smoothing
 smooth_window = 10                       # Smoothing window size (only if enabled)
 

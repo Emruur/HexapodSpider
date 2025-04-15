@@ -1,0 +1,1 @@
+obs = np.concatenate([joint_positions, base_ori, base_linear, base_angular])
