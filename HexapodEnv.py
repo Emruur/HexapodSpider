@@ -132,6 +132,10 @@ class HexapodEnv(Env):
         # --- Zero reward if flipped ---
         if truncated:
             reward = 0.0
+            
+            
+        track_error = abs(base_pos[1])  # how far it drifted from y = 0
+        reward -= 0.2 * track_error
 
         # --- Store current state for next step ---
         self.prev_base_ori = [roll, pitch, yaw]
