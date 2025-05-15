@@ -135,7 +135,7 @@ class HexapodEnv(Env):
             
             
         track_error = abs(base_pos[1])  # how far it drifted from y = 0
-        reward -= 0.2 * track_error
+        reward -= 0.1 * track_error
 
         # --- Store current state for next step ---
         self.prev_base_ori = [roll, pitch, yaw]
@@ -167,9 +167,74 @@ class HexapodEnv(Env):
         obs = np.concatenate([joint_positions, base_ori, base_linear, base_angular])
         return obs.astype(np.float32)  # ✅ enforce dtype here
 
-    def render(self):
+    def render(self, mode="human", width=640, height=480):
+        """
+        Render the scene.
+        
+        Args:
+            mode (str): "human" to move the GUI camera; 
+                        "rgb_array" to return an image array.
+            width (int): width of returned image (rgb_array mode).
+            height (int): height of returned image.
+        
+        Returns:
+            np.ndarray or None: If mode=="rgb_array", returns an HxWx3 uint8 array.
+                                Otherwise returns None.
+        """
+        # Always get the robot’s current base position as camera target
         base_pos, _ = p.getBasePositionAndOrientation(self.robot)
-        p.resetDebugVisualizerCamera(cameraDistance=1.0, cameraYaw=45, cameraPitch=-30, cameraTargetPosition=base_pos)
+        
+        # Parameters for our virtual camera:
+        cam_distance = 1.5
+        cam_yaw = 45
+        cam_pitch = -30
+        
+        # In human mode: just move the debug camera
+        if mode == "human":
+            p.resetDebugVisualizerCamera(
+                cameraDistance=cam_distance,
+                cameraYaw=cam_yaw,
+                cameraPitch=cam_pitch,
+                cameraTargetPosition=base_pos
+            )
+            return None
+        
+        # In rgb_array mode: compute view & projection matrices and grab an image
+        if mode == "rgb_array":
+            # Build view matrix (where the camera is, where it looks, and up-vector)
+            view_matrix = p.computeViewMatrix(
+                cameraEyePosition=[
+                    base_pos[0] + cam_distance * np.cos(np.deg2rad(cam_yaw)),
+                    base_pos[1] + cam_distance * np.sin(np.deg2rad(cam_yaw)),
+                    base_pos[2] + cam_distance * np.sin(np.deg2rad(-cam_pitch))
+                ],
+                cameraTargetPosition=base_pos,
+                cameraUpVector=[0, 0, 1]
+            )
+            
+            # Build projection matrix
+            proj_matrix = p.computeProjectionMatrixFOV(
+                fov=60,                # field of view
+                aspect=float(width)/height,
+                nearVal=0.1,
+                farVal=100.0
+            )
+            
+            # Grab the image
+            _, _, px, _, _ = p.getCameraImage(
+                width=width,
+                height=height,
+                viewMatrix=view_matrix,
+                projectionMatrix=proj_matrix,
+                renderer=p.ER_BULLET_HARDWARE_OPENGL
+            )
+            
+            # px is a flat array of RGBA; reshape and drop alpha
+            img = np.reshape(px, (height, width, 4))[:, :, :3]
+            return img
+        
+        # If somebody passes a totally unsupported mode:
+        raise ValueError(f"Unsupported render mode: {mode}")
 
 
     def close(self):
