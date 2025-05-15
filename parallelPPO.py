@@ -35,13 +35,13 @@ if __name__ == "__main__":  # ← ✅ Fix: only spawn processes inside here
         eval_env,
         best_model_save_path="./logs/best_model",
         log_path="./logs/eval",
-        eval_freq=5000,
+        eval_freq=10000,
         deterministic=True,
         render=False,
     )
 
     checkpoint_callback = CheckpointCallback(
-        save_freq=10_000,
+        save_freq=1_000_000,
         save_path='./logs/checkpoints/',
         name_prefix='ppo_hexapod'
     )
