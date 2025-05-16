@@ -41,7 +41,7 @@ if __name__ == "__main__":  # ← ✅ Fix: only spawn processes inside here
     )
 
     checkpoint_callback = CheckpointCallback(
-        save_freq=1_000_000,
+        save_freq=1_000_000 // num_envs,
         save_path='./logs/checkpoints/',
         name_prefix='ppo_hexapod'
     )
