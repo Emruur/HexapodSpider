@@ -101,9 +101,9 @@ class HexapodTurnEnv(Env):
         # 4) small penalty for tilt
         r_tilt = -1.0 * (abs(roll) + abs(pitch))
         # 5) small penalty for XY drift
-        r_center = -10.0 * (abs(base_pos[0]) + abs(base_pos[1]))
+        r_center = -1.0 * (abs(base_pos[0]) + abs(base_pos[1]))
         # 6) smoothness: small penalty for yaw acceleration
-        r_smooth = -1 * abs(yaw_rate - self.prev_yaw_rate)
+        r_smooth = -0.1 * abs(yaw_rate - self.prev_yaw_rate)
 
         reward = r_turn + r_speed + r_height + r_tilt + r_center + r_smooth
 
