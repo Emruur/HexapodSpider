@@ -54,7 +54,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--log-dir", "-L",
         type=str,
-        default="./one_way_-1_load",
+        default="./one_way_-1_strict",
         help="Base directory for all logging (monitor, tensorboard, checkpoints, etc.)"
     )
     parser.add_argument(
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--load-model-path", "-M",
         type=str,
-        default="./turn_left/best_model/best_model.zip",
+        default=None,
         help="Optional: path to an existing model.zip to load (won’t overwrite save-dir)"
     )
     args = parser.parse_args()

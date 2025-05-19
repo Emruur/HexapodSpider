@@ -4576,3 +4576,80 @@ Episode length: 500.00 +/- 0.00
 |    std                  | 0.467       |
 |    value_loss           | 77          |
 -----------------------------------------
+👉 Timestep: 3736000
+👉 Timestep: 3738000
+👉 Timestep: 3740000
+👉 Timestep: 3742000
+👉 Timestep: 3744000
+👉 Timestep: 3746000
+👉 Timestep: 3748000
+👉 Timestep: 3750000
+👉 Timestep: 3752000
+👉 Timestep: 3754000
+👉 Timestep: 3756000
+👉 Timestep: 3758000
+👉 Timestep: 3760000
+👉 Timestep: 3762000
+👉 Timestep: 3764000
+👉 Timestep: 3766000
+👉 Timestep: 3768000
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 481         |
+|    ep_rew_mean          | 649         |
+| time/                   |             |
+|    fps                  | 304         |
+|    iterations           | 115         |
+|    time_elapsed         | 12378       |
+|    total_timesteps      | 3768320     |
+| train/                  |             |
+|    approx_kl            | 0.063741915 |
+|    clip_fraction        | 0.538       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -11.3       |
+|    explained_variance   | 0.319       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 3.61        |
+|    n_updates            | 5530        |
+|    policy_gradient_loss | 0.0161      |
+|    std                  | 0.467       |
+|    value_loss           | 65          |
+-----------------------------------------
+👉 Timestep: 3770000
+👉 Timestep: 3772000
+👉 Timestep: 3774000
+👉 Timestep: 3776000
+👉 Timestep: 3778000
+👉 Timestep: 3780000
+👉 Timestep: 3782000
+👉 Timestep: 3784000
+👉 Timestep: 3786000
+👉 Timestep: 3788000
+👉 Timestep: 3790000
+👉 Timestep: 3792000
+👉 Timestep: 3794000
+👉 Timestep: 3796000
+👉 Timestep: 3798000
+👉 Timestep: 3800000
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 475         |
+|    ep_rew_mean          | 641         |
+| time/                   |             |
+|    fps                  | 299         |
+|    iterations           | 116         |
+|    time_elapsed         | 12679       |
+|    total_timesteps      | 3801088     |
+| train/                  |             |
+|    approx_kl            | 0.059610672 |
+|    clip_fraction        | 0.52        |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -11.3       |
+|    explained_variance   | 0.351       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 2.2         |
+|    n_updates            | 5540        |
+|    policy_gradient_loss | 0.0153      |
+|    std                  | 0.467       |
+|    value_loss           | 44.4        |
+-----------------------------------------
