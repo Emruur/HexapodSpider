@@ -93,17 +93,17 @@ class HexapodTurnEnv(Env):
 
         # Reward terms simplified for better learning
         # 1) turning in correct direction: reward proportional to yaw_rate * command
-        r_turn = yaw_rate * self.current_command * 0.5
+        r_turn = yaw_rate * self.current_command
         # 2) moderate encouragement of turning speed magnitude
         r_speed = 0.5 * abs(yaw_rate)
         # 3) small penalty for height deviation
-        r_height = -1.0 * abs(base_pos[2] - 0.2)
+        r_height = -2.0 * abs(base_pos[2] - 0.15)
         # 4) small penalty for tilt
         r_tilt = -1.0 * (abs(roll) + abs(pitch))
         # 5) small penalty for XY drift
         r_center = -2.0 * (abs(base_pos[0]) + abs(base_pos[1]))
         # 6) smoothness: small penalty for yaw acceleration
-        r_smooth = -1 * abs(yaw_rate - self.prev_yaw_rate)
+        r_smooth = -2 * abs(yaw_rate - self.prev_yaw_rate)
 
         reward = r_turn + r_speed + r_height + r_tilt + r_center + r_smooth
 
