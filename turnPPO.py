@@ -146,7 +146,8 @@ if __name__ == "__main__":
     )
 
     timestep_callback = TimestepPrinterCallback(print_freq=1_000)
-
+    
+    model = PPO.load("./logs/best_model/best_model.zip", env=train_vec, device="cpu")
     model.learn(
         total_timesteps=15_000_000,
         callback=[plateau_callback, checkpoint_callback, timestep_callback],

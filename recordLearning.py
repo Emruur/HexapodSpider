@@ -46,7 +46,7 @@ def make_videos_from_checkpoints(
         video_path = os.path.join(output_dir, video_name)
         print(f"Creating {video_name} from {base}")
 
-        env = HexapodEnv(render=False)
+        env = HexapodEnv(render=False, eval_mode=True)
         model = PPO.load(model_path)
         obs, _ = env.reset()
         frames = []
