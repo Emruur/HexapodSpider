@@ -24,8 +24,8 @@ class HexapodTurnEnv(Env):
         self.desired_yaw_rate = desired_yaw_rate
 
         # joint limits
-        self.max_joint_angle = 1.5
-        self.min_joint_angle = -1.5
+        self.max_joint_angle = 0.75
+        self.min_joint_angle = -0.75
 
         # placeholders to be set in reset
         self.robot = None
@@ -97,15 +97,13 @@ class HexapodTurnEnv(Env):
         # 2) moderate encouragement of turning speed magnitude
         r_speed = 0.5 * abs(yaw_rate)
         # 3) small penalty for height deviation
-        r_height = -2.0 * abs(base_pos[2] - 0.15)
+        r_height = -2.0 * abs(base_pos[2] - 0.1)
         # 4) small penalty for tilt
         r_tilt = -1.0 * (abs(roll) + abs(pitch))
         # 5) small penalty for XY drift
-        r_center = -2.0 * (abs(base_pos[0]) + abs(base_pos[1]))
-        # 6) smoothness: small penalty for yaw acceleration
-        r_smooth = -2 * abs(yaw_rate - self.prev_yaw_rate)
+        r_center = -0.5 * (abs(base_pos[0]) + abs(base_pos[1]))
 
-        reward = r_turn + r_speed + r_height + r_tilt + r_center + r_smooth
+        reward = r_turn + r_speed + r_height + r_tilt + r_center
 
         # termination: flipped or drifted too far
         truncated = False
