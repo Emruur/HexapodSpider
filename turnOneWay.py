@@ -54,13 +54,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--log-dir", "-L",
         type=str,
-        default="./one_way_-1_strictaf",
+        default="./one_way_-1_chill",
         help="Base directory for all logging (monitor, tensorboard, checkpoints, etc.)"
     )
     parser.add_argument(
         "--command", "-C",
         type=float,
-        default=1.0,
+        default=-1.0,
         help="Fixed turn command to prepend to each observation"
     )
     parser.add_argument(
