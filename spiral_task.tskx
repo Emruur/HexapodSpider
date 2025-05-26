@@ -1,0 +1,91 @@
+﻿version 4.00
+cm_version 1.0
+platform CM-530
+o // param_text:Created : 3 / 24 / 2025
+- 
+o main
+o begin
+o load param_dest:cm:17 param_src:melody_num:17
+o while(1)
+o begin
+o if param_src:cm:2 lop:== param_src:bool_num:1 rop:then
+o begin
+o // param_text:move forward
+o if param_src:cm:1 lop:== param_src:rc100z_num:1 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:2
+o end
+o // param_text:move backward
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:2 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:4
+o end
+o // param_text:turn left
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:4 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:8
+o end
+o // param_text:turn right
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:8 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:6
+o end
+o // param_text:ready
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:16 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:1
+o end
+o // param_text:sit
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:64 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:10
+o end
+o // param_text:attack
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:32 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:13
+o end
+o // param_text:RL forward
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:512 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:18
+o end
+o // param_text:RL backward
+o elseif param_src:cm:1 lop:== param_src:rc100z_num:256 rop:then
+o begin
+o load param_dest:motion:-:50 param_src:dec_num:19
+o end
+o end
+o end
+o end
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
