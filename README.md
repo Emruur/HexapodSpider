@@ -1,6 +1,34 @@
-# Hexapod Reinforcement Learning Project
+# Hexapod Reinforcement Learning and Speech Control Project
 
-This project focuses on training a hexapod robot to walk forward using reinforcement learning, specifically the Proximal Policy Optimization (PPO) algorithm. It includes the Gymnasium environment definition for the hexapod, the training script, and various utility scripts for visualization, motion capture, and performance analysis.
+This project focuses on enabling a BIOLOID King Spider (hexapod) robot to perform intelligent motion using reinforcement learning and flexible voice command control.
+
+It consists of two main components:
+
+1. Reinforcement Learning for Locomotion
+
+   The robot is trained to walk forward using the Proximal Policy Optimization (PPO) algorithm. This part includes:
+
+* A custom Gymnasium environment modeling the hexapod robot using URDF
+
+* A training script for learning walking policies
+
+* Utilities for visualizing training results and capturing motion sequences
+
+* Code to transfer the learned policy from simulation to the physical robot
+
+2. Speech-Controlled Command Execution
+
+   Voice commands are used to control the robot in real time. This is achieved by:
+
+* Capturing speech using a microphone and converting it to text
+
+* Decoding user commands using a local Large Language Model (LLM), Qwen1.5-32B-Chat
+
+* Mapping commands to predefined or learned robot actions (e.g., walk, turn, wave)
+
+* Sending control signals wirelessly to the robot using RC-100 packet simulation via BT-410
+
+This project demonstrates a complete pipeline from simulation-based learning to natural-language interaction with a physical robot.
 
 ---
 
