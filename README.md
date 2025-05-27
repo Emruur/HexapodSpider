@@ -4,6 +4,40 @@ This project focuses on training a hexapod robot to walk forward using reinforce
 
 ---
 
+## How to Use It
+
+1. Plug the **BT-410 Dongle** into your laptop and the **BT-410 Slave** into the BIOLOID King Spider.
+2. Power on the robot.
+3. Switch to **Play mode** and press the **Start** button.
+4. Run `main.py` on the laptop.  
+   >  Requires downloading the LLM model **Qwen1.5-32B-Chat** from Hugging Face.
+5. When the terminal displays “Please speak”, speak clearly in front of your laptop.
+
+## Setup Instructions (Environment Setup)
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Emruur/HexapodSpider.git
+   cd HexapodSpider
+2. Create and open a virtual environment:
+   ```bash
+   conda create --name SPIRAL python=3.10
+   conda activate SPIRAL
+3. Install the dependencies:
+   ```bash
+   pip install -r requirements.txt
+4. Download the LLM model (Qwen/Qwen1.5-32B-Chat) from Hugging Face:
+
+   Visit: https://huggingface.co/Qwen/Qwen1.5-32B-Chat
+
+   Agree to the terms and manually download all model files.
+
+   Create a folder in your project root named Qwen-Qwen1.5-32B-Chat and place all the files inside.
+
+   The project will load the model from that folder directly.
+
+
+
 ## Project Structure
 
 ### Gymnasium Environment
@@ -26,3 +60,12 @@ This project focuses on training a hexapod robot to walk forward using reinforce
 ### Trained Model
 
 The policy of the final trained model is under forward/best_model and a demonstration video is under forward/video/
+
+### BOILOID motion and task files
+
+* **`spiral_motion.mtnx`**: Motion file for R+ Motion 2, containing both default motions and those trained via reinforcement learning.
+* **`spiral_task.tskx`**: Task file for R+ Task 2 that maps buttons to corresponding motions.
+
+### Speech Control Pipeline
+
+* **`main.py`**: Implements the speech control pipeline, including speech-to-text conversion, LLM-based command decoding, RC-100 button simulation, and wireless robot control.
