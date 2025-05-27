@@ -30,7 +30,20 @@ It consists of two main components:
 
 This project demonstrates a complete pipeline from simulation-based learning to natural-language interaction with a physical robot.
 
+![strength](https://github.com/user-attachments/assets/ff70c476-ed5d-4cf8-b8dc-b18d3ac606bf)
+
+
+Video Example:
+
+* Simple Command Execution: https://drive.google.com/file/d/1tkVYsKviaVzhwGa_GgEwMXZ9wAY_NEof/view?usp=sharing
+* Complex Command Execution: https://drive.google.com/file/d/1D2H8iQ8qmOL1wgvzWmyWGQ6vhA2BpBJo/view?usp=sharing
+* Creative Command (Attack and Sit): https://drive.google.com/file/d/1DN0JRS9mZ80HVuQgIOmWm1Qswg_qyBHI/view?usp=sharing
+* Reinforcement Learning Motion in Real Robot: https://drive.google.com/file/d/1ERcQ1-yFYoEH67KoNyCswyEVPRcAYA-p/view?usp=sharing
+* Simulated Forward Walking Behavior: https://drive.google.com/file/d/12A9_CQv3DT8EOlskUJWT63uXcT6Ja75a/view?usp=sharing
+* Simulated Turning Left Behavior: https://drive.google.com/file/d/1dRnd5HAx9iuXx3ri23E7YNaPQ9Su43i1/view?usp=sharing
 ---
+
+
 
 ## How to Use It
 
