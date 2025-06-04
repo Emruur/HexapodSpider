@@ -77,6 +77,24 @@ Video Example:
 
    The project will load the model from that folder directly.
 
+## Changing the Communication Port
+
+If you're using a different serial device (e.g., on Windows or another machine), you need to update the communication port in the code.
+
+In `main`, locate the following line:
+
+   ```python
+   ser = serial.Serial('/dev/tty.usbserial-AB0MI2NT', baudrate=57600, timeout=1)
+   ```
+
+## How to Find Your Port
+
+You can use this Python snippet to list all available serial ports:
+
+   ```python
+   import serial.tools.list_ports
+   print([port.device for port in serial.tools.list_ports.comports()])
+   ```
 
 
 ## Project Structure
